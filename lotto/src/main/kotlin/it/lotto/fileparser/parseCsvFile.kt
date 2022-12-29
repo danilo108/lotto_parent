@@ -22,7 +22,7 @@ fun parseCsvFile(filePath: String): Flux<Estrazione> {
     return Flux.using({
         val inputStream = FileInputStream(filePath)
         val reader = InputStreamReader(inputStream)
-        CSVParser(reader,  CSVFormat.Builder.create().setDelimiter(';').build())
+        CSVParser(reader,  CSVFormat.MONGODB_TSV)
     }, { parser ->
         Flux.fromIterable(parser.records)
             .filter { record ->

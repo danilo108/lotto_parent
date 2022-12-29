@@ -49,11 +49,11 @@ internal class ParseCsvFileKtTest {
 
     private fun writeToFile(file: Path) {
         BufferedWriter(FileWriter(file.toFile())).use { writer ->
-            writer.write("24 Dicembre 2022, Sabato;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n")
-            writer.write("Gioco del Lotto Archivio estrazioni e statistiche (2021);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n")
-            writer.write(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n")
-            writer.write("DATE;Bari;;;;;Cagliari;;;;;Firenze;;;;;Genova;;;;;Milano;;;;;Napoli;;;;;Palermo;;;;;Roma;;;;;Torino;;;;;Venezia;;;;;Nazionale;;;;\n")
-            writer.write("2021-12-28;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;90;\n")
+            writer.write("24 Dicembre 2022, Sabato																																																							\n")
+            writer.write("Gioco del Lotto Archivio estrazioni e statistiche (2021)																																																							\n")
+            writer.write("																																																							\n")
+            writer.write("DATE	Bari					Cagliari					Firenze					Genova					Milano					Napoli					Palermo					Roma					Torino					Venezia					Nazionale				\n")
+            writer.write("2021-12-28\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\t90\n")
             writer.write("another wrong line\n")
 
         }
