@@ -61,7 +61,6 @@ class EstrazioniSearcher {
     }
 
     internal fun findRitardoStorico(matchings: MatchingNumbers, matches: Int): Long {
-        val lastDate = findLastDate(matchings, matches)
         val ritardoAttuale = findRitardoAttuale(matchings, matches)
         val ritardoStorico = matchings.singleMatches.maxOfOrNull { it.lastRitardo }
         return maxOf(ritardoStorico?:0, ritardoAttuale)

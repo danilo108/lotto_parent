@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.lotto.it</groupId>
 	<artifactId>cerca</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>cerca</name>
 	<description>Cerca numeri negli archivi</description>
 	<properties>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>org.example</groupId>
 			<artifactId>lotto</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
