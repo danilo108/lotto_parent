@@ -1,28 +1,43 @@
 package com.lotto.it.cerca.cmds
 
+import com.lotto.it.cerca.utils.InputReader
 import it.lotto.fileparser.parseCsvFile
 import it.lotto.search.EstrazioniExtractor
 import it.lotto.search.EstrazioniSearcher
 import it.lotto.search.dtos.SearchResult
 import it.lotto.search.dtos.SingleLineEstrazione
+import org.jline.utils.AttributedString
+import org.jline.utils.AttributedStringBuilder
+import org.springframework.beans.factory.annotation.Autowired
+
+import org.springframework.shell.component.PathInput
+import org.springframework.shell.component.PathInput.PathInputContext
+import org.springframework.shell.component.StringInput
+import org.springframework.shell.component.StringInput.StringInputContext
+import org.springframework.shell.standard.AbstractShellComponent
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
+import org.springframework.util.StringUtils
 import reactor.core.publisher.Flux
 import java.io.File
+import java.util.Arrays
+import java.util.function.Function
 
 
 @ShellComponent
-class SearchCommandCLI{
+class SearchCommandCLI:AbstractShellComponent(){
 
     var singleLineEstrazioneFlux:Flux<SingleLineEstrazione>? = null
     var numbersToSearch:List<Int>? = null
     var matches:Int? = null
 
+    @Autowired
+    lateinit var inputReader: InputReader
 
     private fun askHowManyCombinations(): Int {
         println("Quante combinazioni vuoi trovare in ogni estrazione? 2 per ambi, 3 per terne, etc ")
         val matches = try {
-            readln()!!.toInt()
+            readInput()!!.toInt()
         } catch (e: Exception) {
             println("C'e' stato un errore per colpa tua!!! Devi scrivere un numerooooo ${e.message}")
             askHowManyCombinations()
@@ -34,7 +49,7 @@ class SearchCommandCLI{
     private fun askWhichNumberToSearch(): List<Int> {
         println("Inserisci i numeri da cercare separati dalla virgola ")
         val numbersToSearch = try {
-            readln()!!.split(",").map { it.toInt() }.toList()
+            readInput()!!.split(",").map { it.toInt() }.toList()
         } catch (e: Exception) {
             println("C'e' stato un errore per colpa tua!!! Devi scrivere solo numeri separati dalla virgola.  ${e.message}")
             println("Per esempio: 1,2,3")
@@ -78,10 +93,56 @@ class SearchCommandCLI{
         loadArchive()
     }
 
+    @ShellMethod(key = ["component string"], value = "String input", group = "Components")
+    fun stringInput(): String? {
+        val component = StringInput(terminal, "Enter value", "myvalue",
+            Function(SrpingInputCustomRenderer()))
+        component.setResourceLoader(resourceLoader)
+        component.templateExecutor = templateExecutor
+
+        val context = component.run(StringInputContext.empty())
+        return "Got value " + context.resultValue
+    }
+
+    private fun SrpingInputCustomRenderer(): (t: StringInputContext) -> MutableList<AttributedString> =
+        { context ->
+            val builder = AttributedStringBuilder()
+            builder.append(context.getName())
+            builder.append(" ")
+            if (context.getResultValue() != null) {
+                builder.append(context.getResultValue())
+            } else {
+                val input: String = context.getInput()
+                if (StringUtils.hasText(input)) {
+                    builder.append(input)
+                } else {
+                    builder.append("[Default " + context.getDefaultValue().toString() + "]")
+                }
+            }
+            mutableListOf(builder.toAttributedString())
+        }
+
+    @ShellMethod(key = ["component path"], value = "Path input", group = "Components")
+    fun pathInput(): String? {
+        val component = PathInput(terminal, "Enter value")
+        component.setResourceLoader(resourceLoader)
+        component.templateExecutor = templateExecutor
+        val context = component.run(PathInputContext.empty())
+        return "Got value " + context.resultValue
+    }
     @ShellMethod("test")
     fun test(){
         println("Write something:")
-        println("You wrote: ${readln()}")
+        val input = inputReader.prompt("Write here")
+        println("You wrote: $input")
+    }
+    private fun readInput(): String {
+        val component = StringInput(getTerminal(), "Enter value", "myvalue")
+        component.setResourceLoader(getResourceLoader())
+        component.templateExecutor = getTemplateExecutor()
+
+        val context = component.run(StringInputContext.empty())
+        return context.resultValue?:""
     }
 
     private fun resetArchive() {
@@ -132,7 +193,7 @@ class SearchCommandCLI{
     private fun askWhichArchiveFile(archiveFiles: List<String>): Int {
         println("Scegli quale file sara' il tuo archivio: ")
         val fileNumber = try {
-            val value = readln()!!.toInt()
+            val value = readInput()!!.toInt()
             if(value < 0 || value > archiveFiles.size - 1) throw Exception("Daje un po'!!! Devi scegliere il numero di file!!! Da 0 a ${archiveFiles.size - 1}")
             value
         } catch (e: Exception) {
@@ -145,7 +206,7 @@ class SearchCommandCLI{
 
     private fun askWhichArchiveFolder(): List<String> {
         println("In quale cartella sono gli archivi? Usa . per la cartella corrente")
-        val archiveDirectory = readln()!!
+        val archiveDirectory = readInput()!!
         println("Hai scelto:\n$archiveDirectory")
         val archiveFiles = listFiles(archiveDirectory)
         return archiveFiles
