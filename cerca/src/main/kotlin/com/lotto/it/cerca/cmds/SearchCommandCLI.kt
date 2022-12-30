@@ -9,7 +9,6 @@ import it.lotto.search.dtos.SingleLineEstrazione
 import org.jline.utils.AttributedString
 import org.jline.utils.AttributedStringBuilder
 import org.springframework.beans.factory.annotation.Autowired
-
 import org.springframework.shell.component.PathInput
 import org.springframework.shell.component.PathInput.PathInputContext
 import org.springframework.shell.component.StringInput
@@ -20,7 +19,6 @@ import org.springframework.shell.standard.ShellMethod
 import org.springframework.util.StringUtils
 import reactor.core.publisher.Flux
 import java.io.File
-import java.util.Arrays
 import java.util.function.Function
 
 
@@ -30,7 +28,6 @@ class SearchCommandCLI:AbstractShellComponent(){
     var singleLineEstrazioneFlux:Flux<SingleLineEstrazione>? = null
     var numbersToSearch:List<Int>? = null
     var matches:Int? = null
-
     @Autowired
     lateinit var inputReader: InputReader
 
@@ -133,16 +130,10 @@ class SearchCommandCLI:AbstractShellComponent(){
     @ShellMethod("test")
     fun test(){
         println("Write something:")
-        val input = inputReader.prompt("Write here")
-        println("You wrote: $input")
+        println("You wrote: ${readInput()}")
     }
     private fun readInput(): String {
-        val component = StringInput(getTerminal(), "Enter value", "myvalue")
-        component.setResourceLoader(getResourceLoader())
-        component.templateExecutor = getTemplateExecutor()
-
-        val context = component.run(StringInputContext.empty())
-        return context.resultValue?:""
+        return inputReader.prompt("", "Scrivi qui...")?:""
     }
 
     private fun resetArchive() {
