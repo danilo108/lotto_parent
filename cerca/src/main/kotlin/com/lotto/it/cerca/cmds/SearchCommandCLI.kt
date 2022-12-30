@@ -34,7 +34,7 @@ class SearchCommandCLI{
     private fun askWhichNumberToSearch(): List<Int> {
         println("Inserisci i numeri da cercare separati dalla virgola ")
         val numbersToSearch = try {
-            readLine()!!.split(",").map { it.toInt() }.toList()
+            readln()!!.split(",").map { it.toInt() }.toList()
         } catch (e: Exception) {
             println("C'e' stato un errore per colpa tua!!! Devi scrivere solo numeri separati dalla virgola.  ${e.message}")
             println("Per esempio: 1,2,3")
@@ -126,7 +126,7 @@ class SearchCommandCLI{
     private fun askWhichArchiveFile(archiveFiles: List<String>): Int {
         println("Scegli quale file sara' il tuo archivio: ")
         val fileNumber = try {
-            val value = readLine()!!.toInt()
+            val value = readln()!!.toInt()
             if(value < 0 || value > archiveFiles.size - 1) throw Exception("Daje un po'!!! Devi scegliere il numero di file!!! Da 0 a ${archiveFiles.size - 1}")
             value
         } catch (e: Exception) {
@@ -139,7 +139,8 @@ class SearchCommandCLI{
 
     private fun askWhichArchiveFolder(): List<String> {
         println("In quale cartella sono gli archivi? Usa . per la cartella corrente")
-        val archiveDirectory = readLine()!!
+        val archiveDirectory = readln()!!
+        println("Hai scelto:\n$archiveDirectory")
         val archiveFiles = listFiles(archiveDirectory)
         return archiveFiles
     }
