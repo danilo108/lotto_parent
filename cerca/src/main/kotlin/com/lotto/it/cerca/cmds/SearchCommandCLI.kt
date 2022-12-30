@@ -78,6 +78,12 @@ class SearchCommandCLI{
         loadArchive()
     }
 
+    @ShellMethod("test")
+    fun test(){
+        println("Write something:")
+        println("You wrote: ${readln()}")
+    }
+
     private fun resetArchive() {
         singleLineEstrazioneFlux = null
     }
