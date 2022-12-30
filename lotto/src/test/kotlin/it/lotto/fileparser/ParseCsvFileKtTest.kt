@@ -48,18 +48,18 @@ internal class ParseCsvFileKtTest {
 
     }
 
-    @Test
-    fun test2022() {
-        val file = createTempFile()
-        write2022(file)
-        val flux = parseCsvFile(file.toAbsolutePath().toString())
-        val expectedRitardo =
-            Duration.between(LocalDate.of(2022, 12, 20).atStartOfDay(), LocalDate.now().atStartOfDay()).toDays()
-        assertThat(EstrazioniSearcher().searchSingleCombination(listOf(5, 7, 11),
-            3,
-            EstrazioniExtractor().estraiSingleLineEstrazioni(flux)))
-            .isEqualTo(SearchResult(listOf(5, 7, 11), expectedRitardo, expectedRitardo, 3))
-    }
+//    @Test
+//    fun test2022() {
+//        val file = createTempFile()
+//        write2022(file)
+//        val flux = parseCsvFile(file.toAbsolutePath().toString())
+//        val expectedRitardo =
+//            Duration.between(LocalDate.of(2022, 12, 20).atStartOfDay(), LocalDate.now().atStartOfDay()).toDays()
+//        assertThat(EstrazioniSearcher().searchSingleCombination(listOf(5, 7, 11),
+//            3,
+//            EstrazioniExtractor().estraiSingleLineEstrazioni(flux)))
+//            .isEqualTo(SearchResult(listOf(5, 7, 11), expectedRitardo, expectedRitardo, 3))
+//    }
 
     private fun createTempFile(): Path {
         return Files.createTempFile("temp-${Random.nextInt()}", ".csv")
