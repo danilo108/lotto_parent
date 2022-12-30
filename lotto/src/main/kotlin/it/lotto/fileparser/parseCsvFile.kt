@@ -24,7 +24,7 @@ fun parseCsvFile(filePath: String): Flux<Estrazione> {
         val reader = InputStreamReader(inputStream)
         CSVParser(reader,  CSVFormat.MONGODB_TSV)
     }, { parser ->
-        Flux.fromIterable(parser.records)
+        Flux.fromIterable(parser.records.reversed())
             .filter { record ->
                 try {
                     SimpleDateFormat("yyyy-MM-dd").parse(record[0])
